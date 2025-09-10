@@ -6,7 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
@@ -14,7 +19,6 @@ import { Search, Edit, Trash, Plus, Tags } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { insertCategorySchema } from "@shared/schema.js";
 
 export default function Categories() {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -27,7 +31,7 @@ export default function Categories() {
   const { toast } = useToast();
 
   const form = useForm({
-    resolver: zodResolver(insertCategorySchema),
+    // resolver: zodResolver(insertCategorySchema),
     defaultValues: {
       name: "",
       description: "",
@@ -35,18 +39,19 @@ export default function Categories() {
     },
   });
 
-  const filteredCategories = state.categories.filter(category =>
-    category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    category.description?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredCategories = state.categories.filter(
+    (category) =>
+      category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      category.description?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleAddCategory = async (data) => {
     try {
-      await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate API call
       addCategory({
         ...data,
         description: data.description || null,
-        isActive: data.isActive ?? true
+        isActive: data.isActive ?? true,
       });
       toast({
         title: "Success",
@@ -64,7 +69,7 @@ export default function Categories() {
   };
 
   const handleEditCategory = (categoryId) => {
-    const category = state.categories.find(c => c.id === categoryId);
+    const category = state.categories.find((c) => c.id === categoryId);
     if (category) {
       form.reset({
         name: category.name,
@@ -78,9 +83,9 @@ export default function Categories() {
 
   const handleUpdateCategory = async (data) => {
     if (!editingCategory) return;
-    
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate API call
       updateCategory(editingCategory, data);
       toast({
         title: "Success",
@@ -117,7 +122,9 @@ export default function Categories() {
     updateCategory(id, { isActive: !currentStatus });
     toast({
       title: "Success",
-      description: `Category ${!currentStatus ? "activated" : "deactivated"} successfully`,
+      description: `Category ${
+        !currentStatus ? "activated" : "deactivated"
+      } successfully`,
     });
   };
 
@@ -153,24 +160,37 @@ export default function Categories() {
         {/* Categories Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredCategories.map((category) => (
-            <Card key={category.id} className="hover:shadow-lg transition-shadow" data-testid={`category-card-${category.id}`}>
+            <Card
+              key={category.id}
+              className="hover:shadow-lg transition-shadow"
+              data-testid={`category-card-${category.id}`}
+            >
               <CardHeader className="pb-4">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center space-x-2">
                     <Tags className="w-5 h-5 text-primary" />
-                    <CardTitle className="text-lg" data-testid={`category-name-${category.id}`}>
+                    <CardTitle
+                      className="text-lg"
+                      data-testid={`category-name-${category.id}`}
+                    >
                       {category.name}
                     </CardTitle>
                   </div>
-                  <Badge variant={category.isActive ? "default" : "secondary"} data-testid={`category-status-${category.id}`}>
+                  <Badge
+                    variant={category.isActive ? "default" : "secondary"}
+                    data-testid={`category-status-${category.id}`}
+                  >
                     {category.isActive ? "Active" : "Inactive"}
                   </Badge>
                 </div>
               </CardHeader>
-              
+
               <CardContent className="space-y-4">
                 {category.description && (
-                  <p className="text-sm text-muted-foreground" data-testid={`category-description-${category.id}`}>
+                  <p
+                    className="text-sm text-muted-foreground"
+                    data-testid={`category-description-${category.id}`}
+                  >
                     {category.description}
                   </p>
                 )}
@@ -178,7 +198,10 @@ export default function Categories() {
                 <div className="flex justify-between items-center pt-2 border-t">
                   <div>
                     <p className="text-sm text-muted-foreground">Restaurants</p>
-                    <p className="font-semibold" data-testid={`category-count-${category.id}`}>
+                    <p
+                      className="font-semibold"
+                      data-testid={`category-count-${category.id}`}
+                    >
                       {category.restaurantCount}
                     </p>
                   </div>
@@ -194,12 +217,19 @@ export default function Categories() {
                   <div className="flex items-center space-x-2">
                     <Switch
                       checked={category.isActive ?? false}
-                      onCheckedChange={() => handleToggleStatus(category.id, category.isActive ?? false)}
+                      onCheckedChange={() =>
+                        handleToggleStatus(
+                          category.id,
+                          category.isActive ?? false
+                        )
+                      }
                       data-testid={`category-toggle-${category.id}`}
                     />
-                    <span className="text-sm">{category.isActive ?? false ? "Active" : "Inactive"}</span>
+                    <span className="text-sm">
+                      {category.isActive ?? false ? "Active" : "Inactive"}
+                    </span>
                   </div>
-                  
+
                   <div className="flex gap-1">
                     <Button
                       variant="outline"
@@ -212,7 +242,9 @@ export default function Categories() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleDeleteCategory(category.id, category.name)}
+                      onClick={() =>
+                        handleDeleteCategory(category.id, category.name)
+                      }
                       data-testid={`delete-category-${category.id}`}
                       className="text-destructive hover:text-destructive/90"
                     >
@@ -231,10 +263,9 @@ export default function Categories() {
             <Tags className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">No categories found</h3>
             <p className="text-muted-foreground mb-4">
-              {searchTerm 
+              {searchTerm
                 ? "Try adjusting your search criteria"
-                : "Get started by adding your first category"
-              }
+                : "Get started by adding your first category"}
             </p>
             <Button onClick={() => setShowAddModal(true)}>
               <Plus className="w-4 h-4 mr-2" />
@@ -253,8 +284,10 @@ export default function Categories() {
             </DialogTitle>
           </DialogHeader>
 
-          <form 
-            onSubmit={form.handleSubmit(editingCategory ? handleUpdateCategory : handleAddCategory)} 
+          <form
+            onSubmit={form.handleSubmit(
+              editingCategory ? handleUpdateCategory : handleAddCategory
+            )}
             className="space-y-4"
           >
             <div>
@@ -267,7 +300,9 @@ export default function Categories() {
                 className="mt-1"
               />
               {form.formState.errors.name && (
-                <p className="text-sm text-destructive mt-1">{form.formState.errors.name.message}</p>
+                <p className="text-sm text-destructive mt-1">
+                  {form.formState.errors.name.message}
+                </p>
               )}
             </div>
 
@@ -282,7 +317,9 @@ export default function Categories() {
                 rows={3}
               />
               {form.formState.errors.description && (
-                <p className="text-sm text-destructive mt-1">{form.formState.errors.description.message}</p>
+                <p className="text-sm text-destructive mt-1">
+                  {form.formState.errors.description.message}
+                </p>
               )}
             </div>
 
@@ -291,7 +328,9 @@ export default function Categories() {
                 id="isActive"
                 data-testid="switch-category-active"
                 checked={form.watch("isActive") ?? false}
-                onCheckedChange={(checked) => form.setValue("isActive", checked ?? false)}
+                onCheckedChange={(checked) =>
+                  form.setValue("isActive", checked ?? false)
+                }
               />
               <Label htmlFor="isActive">Active category</Label>
             </div>

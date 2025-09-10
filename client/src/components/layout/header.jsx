@@ -1,14 +1,27 @@
-import { Bell, Plus } from "lucide-react";
+import { Plus, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useLocation } from "wouter";
 
+export const Header = ({
+  title,
+  subtitle,
+  showAddButton = false,
+  onAddClick,
+  addButtonText = "Add",
+}) => {
+  const [, setLocation] = useLocation();
 
-export function Header({ 
-  title, 
-  subtitle, 
-  showAddButton = false, 
-  onAddClick, 
-  addButtonText = "Add" 
-}) {
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setLocation("/login"); // redirect with Wouter
+  };
+
   return (
     <header className="bg-card border-b border-border px-6 py-4">
       <div className="flex items-center justify-between">
@@ -17,17 +30,8 @@ export function Header({
           <p className="text-muted-foreground">{subtitle}</p>
         </div>
         <div className="flex items-center gap-4">
-          <button 
-            className="relative p-2 text-muted-foreground hover:text-foreground transition-colors"
-            data-testid="notifications-button"
-          >
-            <Bell className="h-5 w-5" />
-            <span className="absolute -top-1 -right-1 w-5 h-5 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">
-              3
-            </span>
-          </button>
           {showAddButton && (
-            <Button 
+            <Button
               onClick={onAddClick}
               data-testid="add-button"
               className="bg-primary text-primary-foreground hover:bg-primary/90"
@@ -36,8 +40,32 @@ export function Header({
               {addButtonText}
             </Button>
           )}
+
+          {/* Profile Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors">
+                <User className="w-5 h-5 text-primary" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40">
+              <DropdownMenuItem asChild>
+                <a href="/profile" className="flex items-center gap-2">
+                  <User className="w-4 h-4" />
+                  Profile
+                </a>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={handleLogout}
+                className="flex items-center gap-2 text-red-600"
+              >
+                <LogOut className="w-4 h-4" />
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>
   );
-}
+};

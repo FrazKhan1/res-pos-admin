@@ -11,7 +11,13 @@ import { useApp } from "@/context/app-context.jsx";
 import { mockStats } from "@/lib/mock-data.js";
 import { Eye, Edit, Trash, Unlock, Search } from "lucide-react";
 import { Input } from "@/components/ui/input.tsx";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select.tsx";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { useToast } from "@/hooks/use-toast";
 
@@ -23,18 +29,18 @@ export default function Dashboard() {
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [confirmationData, setConfirmationData] = useState(null);
 
-  const { 
-    state, 
-    deleteRestaurant, 
-    blockRestaurant, 
+  const {
+    state,
+    deleteRestaurant,
+    blockRestaurant,
     unblockRestaurant,
     setSearchTerm,
     setStatusFilter,
     setCurrentPage,
     getFilteredRestaurants,
-    getTotalPages
+    getTotalPages,
   } = useApp();
-  
+
   const { toast } = useToast();
 
   const handleDeleteRestaurant = (id, name) => {
@@ -96,7 +102,8 @@ export default function Dashboard() {
   const totalPages = getTotalPages();
 
   const getStatusBadge = (status) => {
-    const baseClasses = "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium";
+    const baseClasses =
+      "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium";
     switch (status) {
       case "active":
         return `${baseClasses} bg-green-100 text-green-800`;
@@ -119,7 +126,7 @@ export default function Dashboard() {
       bgColor: "bg-primary/10",
     },
     {
-      title: "Active Restaurants", 
+      title: "Active Restaurants",
       value: mockStats.activeRestaurants.toString(),
       icon: CheckCircle,
       growth: `+${mockStats.activeGrowth}%`,
@@ -160,21 +167,35 @@ export default function Dashboard() {
           {statsCards.map((stat, index) => {
             const Icon = stat.icon;
             return (
-              <div key={index} className="bg-card rounded-lg p-6 border border-border">
+              <div
+                key={index}
+                className="bg-card rounded-lg p-6 border border-border"
+              >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">{stat.title}</p>
-                    <p className="text-3xl font-bold" data-testid={`stat-${stat.title.toLowerCase().replace(/\s+/g, '-')}`}>
+                    <p className="text-sm text-muted-foreground">
+                      {stat.title}
+                    </p>
+                    <p
+                      className="text-3xl font-bold"
+                      data-testid={`stat-${stat.title
+                        .toLowerCase()
+                        .replace(/\s+/g, "-")}`}
+                    >
                       {stat.value}
                     </p>
                   </div>
-                  <div className={`w-12 h-12 ${stat.bgColor} rounded-lg flex items-center justify-center`}>
+                  <div
+                    className={`w-12 h-12 ${stat.bgColor} rounded-lg flex items-center justify-center`}
+                  >
                     <Icon className={`${stat.color} text-xl w-6 h-6`} />
                   </div>
                 </div>
                 <div className="mt-4 flex items-center text-sm">
                   <span className="text-green-600">{stat.growth}</span>
-                  <span className="text-muted-foreground ml-2">from last month</span>
+                  <span className="text-muted-foreground ml-2">
+                    from last month
+                  </span>
                 </div>
               </div>
             );
@@ -203,7 +224,10 @@ export default function Dashboard() {
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
-                <Select value={state.statusFilter} onValueChange={setStatusFilter}>
+                <Select
+                  value={state.statusFilter}
+                  onValueChange={setStatusFilter}
+                >
                   <SelectTrigger className="w-40" data-testid="filter-status">
                     <SelectValue placeholder="Filter by status" />
                   </SelectTrigger>
@@ -222,27 +246,52 @@ export default function Dashboard() {
             <table className="w-full">
               <thead className="bg-muted/50">
                 <tr>
-                  <th className="text-left py-3 px-6 font-medium text-sm text-muted-foreground">Restaurant</th>
-                  <th className="text-left py-3 px-6 font-medium text-sm text-muted-foreground">Location</th>
-                  <th className="text-left py-3 px-6 font-medium text-sm text-muted-foreground">Status</th>
-                  <th className="text-left py-3 px-6 font-medium text-sm text-muted-foreground">Revenue</th>
-                  <th className="text-left py-3 px-6 font-medium text-sm text-muted-foreground">Joined</th>
-                  <th className="text-right py-3 px-6 font-medium text-sm text-muted-foreground">Actions</th>
+                  <th className="text-left py-3 px-6 font-medium text-sm text-muted-foreground">
+                    Restaurant
+                  </th>
+                  <th className="text-left py-3 px-6 font-medium text-sm text-muted-foreground">
+                    Location
+                  </th>
+                  <th className="text-left py-3 px-6 font-medium text-sm text-muted-foreground">
+                    Status
+                  </th>
+                  <th className="text-left py-3 px-6 font-medium text-sm text-muted-foreground">
+                    Revenue
+                  </th>
+                  <th className="text-left py-3 px-6 font-medium text-sm text-muted-foreground">
+                    Joined
+                  </th>
+                  <th className="text-right py-3 px-6 font-medium text-sm text-muted-foreground">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {filteredRestaurants.map((restaurant) => (
-                  <tr key={restaurant.id} className="hover:bg-muted/30 transition-colors" data-testid={`restaurant-row-${restaurant.id}`}>
+                  <tr
+                    key={restaurant.id}
+                    className="hover:bg-muted/30 transition-colors"
+                    data-testid={`restaurant-row-${restaurant.id}`}
+                  >
                     <td className="py-4 px-6">
                       <div className="flex items-center">
-                        <img 
-                          src={restaurant.imageUrl || "/placeholder-restaurant.jpg"} 
+                        <img
+                          src={
+                            restaurant.imageUrl || "/placeholder-restaurant.jpg"
+                          }
                           alt={restaurant.name}
                           className="w-10 h-10 rounded-lg object-cover mr-3"
                         />
                         <div>
-                          <p className="font-medium" data-testid={`restaurant-name-${restaurant.id}`}>{restaurant.name}</p>
-                          <p className="text-sm text-muted-foreground">{restaurant.cuisine}</p>
+                          <p
+                            className="font-medium"
+                            data-testid={`restaurant-name-${restaurant.id}`}
+                          >
+                            {restaurant.name}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            {restaurant.cuisine}
+                          </p>
                         </div>
                       </div>
                     </td>
@@ -250,8 +299,12 @@ export default function Dashboard() {
                       {restaurant.city}, {restaurant.state}
                     </td>
                     <td className="py-4 px-6">
-                      <span className={getStatusBadge(restaurant.status)} data-testid={`restaurant-status-${restaurant.id}`}>
-                        {restaurant.status.charAt(0).toUpperCase() + restaurant.status.slice(1)}
+                      <span
+                        className={getStatusBadge(restaurant.status)}
+                        data-testid={`restaurant-status-${restaurant.id}`}
+                      >
+                        {restaurant.status.charAt(0).toUpperCase() +
+                          restaurant.status.slice(1)}
                       </span>
                     </td>
                     <td className="py-4 px-6 font-medium">
@@ -284,7 +337,12 @@ export default function Dashboard() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => handleUnblockRestaurant(restaurant.id, restaurant.name)}
+                            onClick={() =>
+                              handleUnblockRestaurant(
+                                restaurant.id,
+                                restaurant.name
+                              )
+                            }
                             data-testid={`unblock-restaurant-${restaurant.id}`}
                             className="p-2 h-8 w-8 text-green-600 hover:text-green-700"
                           >
@@ -294,7 +352,12 @@ export default function Dashboard() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => handleBlockRestaurant(restaurant.id, restaurant.name)}
+                            onClick={() =>
+                              handleBlockRestaurant(
+                                restaurant.id,
+                                restaurant.name
+                              )
+                            }
                             data-testid={`block-restaurant-${restaurant.id}`}
                             className="p-2 h-8 w-8 text-yellow-600 hover:text-yellow-700"
                           >
@@ -304,7 +367,12 @@ export default function Dashboard() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => handleDeleteRestaurant(restaurant.id, restaurant.name)}
+                          onClick={() =>
+                            handleDeleteRestaurant(
+                              restaurant.id,
+                              restaurant.name
+                            )
+                          }
                           data-testid={`delete-restaurant-${restaurant.id}`}
                           className="p-2 h-8 w-8 text-destructive hover:text-destructive/90"
                         >
@@ -321,33 +389,46 @@ export default function Dashboard() {
           <div className="p-6 border-t border-border">
             <div className="flex items-center justify-between">
               <p className="text-sm text-muted-foreground">
-                Showing {((state.currentPage - 1) * state.itemsPerPage) + 1}-{Math.min(state.currentPage * state.itemsPerPage, state.restaurants.length)} of {state.restaurants.length} restaurants
+                Showing {(state.currentPage - 1) * state.itemsPerPage + 1}-
+                {Math.min(
+                  state.currentPage * state.itemsPerPage,
+                  state.restaurants.length
+                )}{" "}
+                of {state.restaurants.length} restaurants
               </p>
               <div className="flex gap-2">
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setCurrentPage(Math.max(1, state.currentPage - 1))}
+                  onClick={() =>
+                    setCurrentPage(Math.max(1, state.currentPage - 1))
+                  }
                   disabled={state.currentPage === 1}
                   data-testid="pagination-previous"
                 >
                   Previous
                 </Button>
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                  <Button
-                    key={page}
-                    variant={page === state.currentPage ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setCurrentPage(page)}
-                    data-testid={`pagination-page-${page}`}
-                  >
-                    {page}
-                  </Button>
-                ))}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => (
+                    <Button
+                      key={page}
+                      variant={
+                        page === state.currentPage ? "default" : "outline"
+                      }
+                      size="sm"
+                      onClick={() => setCurrentPage(page)}
+                      data-testid={`pagination-page-${page}`}
+                    >
+                      {page}
+                    </Button>
+                  )
+                )}
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setCurrentPage(Math.min(totalPages, state.currentPage + 1))}
+                  onClick={() =>
+                    setCurrentPage(Math.min(totalPages, state.currentPage + 1))
+                  }
                   disabled={state.currentPage === totalPages}
                   data-testid="pagination-next"
                 >
@@ -359,10 +440,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <AddRestaurantModal
-        open={showAddModal}
-        onOpenChange={setShowAddModal}
-      />
+      <AddRestaurantModal open={showAddModal} onOpenChange={setShowAddModal} />
 
       <ViewRestaurantModal
         open={showViewModal}
