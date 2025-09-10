@@ -19,18 +19,22 @@ export function Sidebar() {
         <h1 className="text-xl font-bold text-primary">RestaurantPOS</h1>
         <p className="text-sm text-muted-foreground">Super Admin</p>
       </div>
-      
+
       <nav className="mt-6">
         <ul className="space-y-2 px-4">
           {navigation.map((item) => {
             const Icon = item.icon;
-            const isActive = location === item.href || (item.href !== "/" && location.startsWith(item.href));
-            
+            const isActive =
+              location === item.href ||
+              (item.href !== "/" && location.startsWith(item.href));
+
             return (
               <li key={item.name}>
                 <Link
                   href={item.href}
-                  data-testid={`nav-${item.name.toLowerCase().replace(" ", "-")}`}
+                  data-testid={`nav-${item.name
+                    .toLowerCase()
+                    .replace(" ", "-")}`}
                   className={cn(
                     "flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors",
                     isActive
@@ -46,8 +50,6 @@ export function Sidebar() {
           })}
         </ul>
       </nav>
-      
-      
     </aside>
   );
 }
